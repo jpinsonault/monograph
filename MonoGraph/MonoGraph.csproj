@@ -46,6 +46,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="tests\AdjacencyGraphTests.cs" />
+    <Compile Include="Algorithms.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

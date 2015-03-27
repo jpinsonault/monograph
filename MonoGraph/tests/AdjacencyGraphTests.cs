@@ -35,8 +35,8 @@ namespace MonoGraph
         [Test]
         public void TestEdgeComparison()
         {
-            var cat_hat = new Edge<string>("cat", "hat");
-            var hat_cat = new Edge<string>("hat", "cat");
+            var cat_hat = new E("cat", "hat");
+            var hat_cat = new E("hat", "cat");
 
             Assert.IsTrue(cat_hat.CompareTo(cat_hat) == 0, "should be equal");
             Assert.IsTrue(cat_hat.CompareTo(hat_cat) == -1, "should be less than");
@@ -48,7 +48,7 @@ namespace MonoGraph
         {
             var reason = "graph should contain edge a->b";
 
-            var a_b = new Edge<string>("a", "b");
+            var a_b = new E("a", "b");
 
             _graph.AddVertex("a");
             _graph.AddVertex("b");
@@ -61,7 +61,7 @@ namespace MonoGraph
         [ExpectedException(typeof(VertexNotFoundException))]
         public void TestAddingEdgeWithMissingVertex()
         {
-            var a_b = new Edge<string>("a", "c");
+            var a_b = new E("a", "c");
 
             _graph.AddVertex("a");
             _graph.AddVertex("b");
@@ -75,7 +75,7 @@ namespace MonoGraph
         {
             _graph.AddVertex("a");
             _graph.AddVertex("b");
-            var a_b = new Edge<string>("a", "b");
+            var a_b = new E("a", "b");
 
             _graph.AddDirectedEdge(a_b);
             // Should throw
@@ -88,7 +88,7 @@ namespace MonoGraph
         {
             _graph.AddVertex("a");
             _graph.AddVertex("b");
-            var a_b = new Edge<string>("a", "b");
+            var a_b = new E("a", "b");
             var b_a = a_b.Reversed();
 
             _graph.AddBidirectionalEdge(a_b);
