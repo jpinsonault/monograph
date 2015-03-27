@@ -47,6 +47,18 @@ namespace MonoGraph
         }
 
         [Test]
+        [ExpectedException(typeof(VertexNotFoundException))]
+        public void TestAddingEdgeWithMissingVertex()
+        {
+            var a_b = new Edge<string>("a", "c");
+
+            _graph.AddVertex("a");
+            _graph.AddVertex("b");
+            // Should throw
+            _graph.AddDirectedEdge(a_b);
+        }
+
+        [Test]
         [ExpectedException(typeof(DuplicateEdgeException))]
         public void TestDuplicateEdgeThrowsException()
         {
@@ -55,6 +67,7 @@ namespace MonoGraph
             var a_b = new Edge<string>("a", "b");
 
             _graph.AddDirectedEdge(a_b);
+            // Should throw
             _graph.AddDirectedEdge(a_b);
         }
 
@@ -68,6 +81,7 @@ namespace MonoGraph
             var b_a = a_b.Reversed();
 
             _graph.AddBidirectionalEdge(a_b);
+            // Should throw
             _graph.AddBidirectionalEdge(b_a);
         }
 
@@ -134,7 +148,7 @@ namespace MonoGraph
 
             Assert.AreEqual(collectedEdges.Count, edges.Count, "Should have the same number of edges");
         }
-        
+
         [Test]
         public void TestBidirectionalGraphHasAllEdges()
         {

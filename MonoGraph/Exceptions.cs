@@ -35,4 +35,21 @@ namespace MonoGraph
         {
         }
     }
+
+    public class VertexNotFoundException : Exception
+    {
+        public VertexNotFoundException()
+        {
+        }
+
+        public VertexNotFoundException(string message)
+            : base(message)
+        {
+        }
+
+        public VertexNotFoundException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
 }

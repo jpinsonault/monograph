@@ -22,9 +22,19 @@ namespace MonoGraph
 
         private void CheckEdge(TEdge edge)
         {
-            // Throws an exception if the edge already exists
+            // Throws an exception if the edge already exists or the vertices don't exist
             if (ContainsEdge(edge)) {
                 throw new DuplicateEdgeException(string.Format("Tried to add edge '{0}' to the graph twice", edge));
+            }
+
+            if (!VertexEdgeDictionary.ContainsKey(edge.First)){
+                var errorMessage = string.Format("Tried to add edge to non-existant vertex '{0}'", edge.First);
+                throw new VertexNotFoundException(errorMessage);
+            }
+
+            if (!VertexEdgeDictionary.ContainsKey(edge.Second)){
+                var errorMessage = string.Format("Tried to add edge to non-existant vertex '{0}'", edge.Second);
+                throw new VertexNotFoundException(errorMessage);
             }
         }
 
