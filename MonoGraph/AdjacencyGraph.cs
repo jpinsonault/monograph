@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MonoGraph
 {
-    public class AdjacencyGraph<TVertex, TEdge> where TEdge : IEdgeInterface<TVertex, TEdge>, new()
+    public class AdjacencyGraph<TVertex, TEdge> where TEdge : IEdgeInterface<TVertex, TEdge>
     {
         private readonly Dictionary<TVertex, List<TEdge>> VertexEdgeDictionary;
 

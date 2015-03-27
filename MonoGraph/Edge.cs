@@ -3,7 +3,7 @@ using System;
 namespace MonoGraph
 {
     // Every edge object should implment these methods
-    public interface IEdgeInterface<TVertex, TEdge> where TEdge : new()
+    public interface IEdgeInterface<TVertex, TEdge>
     {
         TVertex First { get; }
         TVertex Second { get; }
