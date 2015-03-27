@@ -16,7 +16,7 @@ namespace MonoGraph
         IEdgeInterface<TVertex, Edge<TVertex>>,
         IEquatable<Edge<TVertex>>,
         IComparable<Edge<TVertex>>
-        where TVertex : class, IComparable<TVertex>
+        where TVertex : IComparable<TVertex>
     {
         public TVertex First { get; private set; }
         public TVertex Second { get; private set; }
@@ -50,17 +50,17 @@ namespace MonoGraph
                 return false;
             }
 
-            return (First == objCast.First) && (Second == objCast.Second);
+            return (First.Equals(objCast.First)) && (Second.Equals(objCast.Second));
         }
 
-        public bool Equals(Edge<TVertex> other)
+        public bool Equals(Edge<TVertex> obj)
         {
-            if ((object)other == null)
+            if ((object)obj == null)
             {
                 return false;
             }
 
-            return First == other.First && Second == other.Second;
+            return (First.Equals(obj.First)) && (Second.Equals(obj.Second));
         }
 
         public int CompareTo(Edge<TVertex> obj){

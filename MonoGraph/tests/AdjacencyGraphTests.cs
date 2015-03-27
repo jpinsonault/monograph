@@ -33,6 +33,17 @@ namespace MonoGraph
         }
 
         [Test]
+        public void TestEdgeComparison()
+        {
+            var cat_hat = new Edge<string>("cat", "hat");
+            var hat_cat = new Edge<string>("hat", "cat");
+
+            Assert.IsTrue(cat_hat.CompareTo(cat_hat) == 0, "should be equal");
+            Assert.IsTrue(cat_hat.CompareTo(hat_cat) == -1, "should be less than");
+            Assert.IsTrue(hat_cat.CompareTo(cat_hat) == 1, "should be greater than");
+        }
+
+        [Test]
         public void TestAddingEdge()
         {
             var reason = "graph should contain edge a->b";
