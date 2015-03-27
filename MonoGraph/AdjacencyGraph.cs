@@ -20,11 +20,17 @@ namespace MonoGraph
             VertexEdgeDictionary.Add(vertex, new List<TEdge>());
         }
 
-        public void AddDirectedEdge(TEdge edge)
+        private void CheckEdge(TEdge edge)
         {
+            // Throws an exception if the edge already exists
             if (ContainsEdge(edge)) {
                 throw new DuplicateEdgeException(string.Format("Tried to add edge '{0}' to the graph twice", edge));
             }
+        }
+
+        public void AddDirectedEdge(TEdge edge)
+        {
+            CheckEdge(edge);
 
             VertexEdgeDictionary[edge.First].Add(edge);
         }
@@ -33,13 +39,8 @@ namespace MonoGraph
         {
             var rerverseEdge = edge.Reversed();
 
-            if (ContainsEdge(edge)) {
-                throw new DuplicateEdgeException(string.Format("Tried to add edge '{0}' to the graph twice", edge));
-            }
-
-            if (ContainsEdge(rerverseEdge)) {
-                throw new DuplicateEdgeException(string.Format("Tried to add edge '{0}' to the graph twice", rerverseEdge));
-            }
+            CheckEdge(edge);
+            CheckEdge(rerverseEdge);
 
             VertexEdgeDictionary[edge.First].Add(edge);
             VertexEdgeDictionary[edge.Second].Add(rerverseEdge);
