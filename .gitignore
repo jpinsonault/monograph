@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io
+nunit/*
 
 ### SublimeText ###
 # cache files for sublime text
