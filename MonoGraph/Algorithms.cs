@@ -8,12 +8,12 @@ namespace MonoGraph.Algorithms
 	class DijkstraShortestPath<TVertex, TEdge> 
 		where TEdge : IEdgeInterface<TVertex, TEdge>
 	{
-		private readonly AdjacencyGraph<TVertex, TEdge> Graph;
+		private readonly AdjacencyListGraph<TVertex, TEdge> Graph;
 		private readonly Dictionary<TEdge, double> EdgeCosts;
 		public readonly Dictionary<TVertex, double> ComputedCosts;
 		public readonly Dictionary<TVertex, TVertex> ComputedPaths;
 
-		public DijkstraShortestPath(AdjacencyGraph<TVertex, TEdge> graph, Dictionary<TEdge, double> edgeCosts)
+		public DijkstraShortestPath(AdjacencyListGraph<TVertex, TEdge> graph, Dictionary<TEdge, double> edgeCosts)
 		{
 			this.Graph = graph;
 			this.EdgeCosts = edgeCosts;

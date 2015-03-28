@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace MonoGraph
 {
-    public class AdjacencyGraph<TVertex, TEdge> where TEdge : IEdgeInterface<TVertex, TEdge>
+    public class AdjacencyListGraph<TVertex, TEdge> where TEdge : IEdgeInterface<TVertex, TEdge>
     {
         private readonly Dictionary<TVertex, List<TEdge>> VertexEdgeDictionary;
 
-        public AdjacencyGraph()
+        public AdjacencyListGraph()
         {
             VertexEdgeDictionary = new Dictionary<TVertex, List<TEdge>>();
         }

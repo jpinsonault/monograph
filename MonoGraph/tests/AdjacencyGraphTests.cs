@@ -9,7 +9,7 @@ namespace MonoGraph
     [TestFixtureAttribute]
     public class DijkstraShortestPathTest_SimpleDirectedGraph_ComputeAllFromA
     {
-        private AdjacencyGraph<string, Edge<string>> testGraph;
+        private AdjacencyListGraph<string, Edge<string>> testGraph;
 
         private List<string> vertices = new List<string> {"a", "b", "c", "d", "e"};
 
@@ -43,7 +43,7 @@ namespace MonoGraph
         [SetUpAttribute]
         public void Setup()
         {
-            testGraph = new AdjacencyGraph<string, E>();
+            testGraph = new AdjacencyListGraph<string, E>();
             foreach(string vertex in vertices){
                 testGraph.AddVertex(vertex);
             }
@@ -89,7 +89,7 @@ namespace MonoGraph
     [TestFixtureAttribute]
     public class DijkstraShortestPathTest_SimpleBidirectionalGraph_ComputeAllFromA
     {
-        private AdjacencyGraph<string, Edge<string>> testGraph;
+        private AdjacencyListGraph<string, Edge<string>> testGraph;
 
         private List<string> vertices = new List<string> {"a", "b", "c", "d", "e"};
 
@@ -133,7 +133,7 @@ namespace MonoGraph
                 bidirectionalEdgeCosts.Add(reversed, edgePair.Value);
             }
 
-            testGraph = new AdjacencyGraph<string, Edge<string>>();
+            testGraph = new AdjacencyListGraph<string, Edge<string>>();
             foreach(string vertex in vertices){
                 testGraph.AddVertex(vertex);
             }

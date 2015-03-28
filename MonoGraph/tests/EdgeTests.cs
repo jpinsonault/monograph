@@ -11,12 +11,12 @@ namespace MonoGraph
     [TestFixtureAttribute]
     public class VertexAndEdgeTests
     {
-        private AdjacencyGraph<string, Edge<string>> testGraph;
+        private AdjacencyListGraph<string, Edge<string>> testGraph;
 
         [SetUpAttribute]
         public void Setup()
         {
-            testGraph = new AdjacencyGraph<string, Edge<string>>();
+            testGraph = new AdjacencyListGraph<string, Edge<string>>();
         }
 
         [Test]
