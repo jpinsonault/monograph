@@ -1,7 +1,33 @@
 # MonoGraph
-A simple graph data structure specifically written to be compatible with the Unity game engine
+A simple graph data structure specifically written to be compatible with the Unity game engine, but perfectly usable on it's own.
+
+It's been compiled under the .Net 3.5 runtime
 
 In trying to find a good graph library for Unity I found many that were compatible with Mono but wouldn't work with Unity. So I decided to create yet another one, but make sure it was compatible in the hopes that the next poor soul that comes along looking for a graph library won't have to go through what I did.
+
+This library is in its early stages, but the functionality that's here is well tested.
+
+### Download/Installation
+You can find the releases [here](https://github.com/jpinsonault/monograph/releases).
+
+To make it available to your Unity project, download the `MonoGraph.dll` and place it somewhere in your project's `Assets` folder.
+
+* [Quickstart](#quickstart)
+* [Description/Features](#descriptionfeatures)
+    * [AdjacencyListGraph](#adjacencylistgraph)
+* [Usage](#usage)
+    * [Creating a graph](#creating-a-graph)
+    * [Adding vertices](#adding-vertices)
+    * [Adding edges](#adding-edges)
+    * [Iterating over vertices](#iterating-over-vertices)
+    * [Iterating over edges](#iterating-over-edges)
+    * [Iterating over all edges](#iterating-over-all-edges)
+    * [Vertices](#vertices)
+    * [Edges](#edges)
+    * [IEdgeInterface](#iedgeinterface)
+* [Algorithms](#algorithms)
+    * [Dijkstra's shortest path](#dijkstras-shortest-path)
+
 
 ### Quickstart
 ```c#
@@ -32,8 +58,8 @@ foreach(var edge in stringGraph.EdgeIterator("a"){
 // a goes to c
 // a goes to d
 ```
-Description/Features
---
+### Description/Features
+
 The libary tends toward being simple and modular. It doesn't do a whole lot for you, but provides a base you can build off of.
 
 #### AdjacencyListGraph
