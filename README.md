@@ -51,6 +51,7 @@ Note that the type of vertex and the type of the `Edge` must match
 
 #### Adding vertices
 Vertices are added using `AdjacencyListGraph.AddVertex(TVertex vertex)`
+
     stringGraph.AddVertex("a");
     intGraph.AddVertex(42);
 
