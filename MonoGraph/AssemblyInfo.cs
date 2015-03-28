@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("MonoGraph")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A simple graph data structure specifically written to be compatible with the Unity game engine")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
