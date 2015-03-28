@@ -2,208 +2,177 @@ namespace MonoGraph
 {
     using NUnit.Framework;
     using System.Collections.Generic;
-    using System.Linq;
+
+    // Alias for easy typing
     using E = Edge<string>;
 
     [TestFixtureAttribute]
-    public class VertexAndEdgeTests
+    public class DijkstraShortestPathTest_SimpleDirectedGraph_ComputeAllFromA
     {
-        private AdjacencyGraph<string, Edge<string>> _graph;
+        private AdjacencyGraph<string, Edge<string>> testGraph;
+
+        private List<string> vertices = new List<string> {"a", "b", "c", "d", "e"};
+
+        private readonly Dictionary<E, double> edgesCosts = new Dictionary<E, double> {
+            {new E("a", "d"), 3.0},
+            {new E("a", "b"), 20.0},
+            {new E("a", "e"), 2.0},
+            {new E("d", "c"), 2.0},
+            {new E("c", "b"), 2.0},
+            {new E("e", "d"), 2.0}
+        };
+
+        private readonly Dictionary<string, double> expectedSmallestCosts = new Dictionary<string, double> {
+            {"a", 0},
+            {"b", 7},
+            {"c", 5},
+            {"d", 3},
+            {"e", 2},
+        };
+
+        private readonly Dictionary<string, string> expectedPaths = new Dictionary<string, string> {
+            {"a", "a"},
+            {"b", "c"},
+            {"c", "d"},
+            {"d", "a"},
+            {"e", "a"},
+        };
+
+        private Algorithms.DijkstraShortestPath<string, E> shortestPath;
 
         [SetUpAttribute]
         public void Setup()
         {
-            _graph = new AdjacencyGraph<string, Edge<string>>();
-        }
-
-        [Test]
-        public void TestAddingVertex()
-        {
-            var reason = "graph should contain vertex 'a'";
-            _graph.AddVertex("a");
-            Assert.IsTrue(_graph.ContainsVertex("a"), reason);
-        }
-
-        [Test]
-        [ExpectedException(typeof(DuplicateVertexException))]
-        public void TestDuplicateVertexThrowsException()
-        {
-            _graph.AddVertex("a");
-            _graph.AddVertex("a");
-        }
-
-        [Test]
-        public void TestEdgeComparison()
-        {
-            var cat_hat = new Edge<string>("cat", "hat");
-            var hat_cat = new Edge<string>("hat", "cat");
-
-            Assert.IsTrue(cat_hat.CompareTo(cat_hat) == 0, "should be equal");
-            Assert.IsTrue(cat_hat.CompareTo(hat_cat) == -1, "should be less than");
-            Assert.IsTrue(hat_cat.CompareTo(cat_hat) == 1, "should be greater than");
-        }
-
-        [Test]
-        public void TestAddingEdge()
-        {
-            var reason = "graph should contain edge a->b";
-
-            var a_b = new Edge<string>("a", "b");
-
-            _graph.AddVertex("a");
-            _graph.AddVertex("b");
-            _graph.AddDirectedEdge(a_b);
-
-            Assert.IsTrue(_graph.ContainsEdge(a_b), reason);
-        }
-
-        [Test]
-        [ExpectedException(typeof(VertexNotFoundException))]
-        public void TestAddingEdgeWithMissingVertex()
-        {
-            var a_b = new Edge<string>("a", "c");
-
-            _graph.AddVertex("a");
-            _graph.AddVertex("b");
-            // Should throw
-            _graph.AddDirectedEdge(a_b);
-        }
-
-        [Test]
-        [ExpectedException(typeof(DuplicateEdgeException))]
-        public void TestDuplicateEdgeThrowsException()
-        {
-            _graph.AddVertex("a");
-            _graph.AddVertex("b");
-            var a_b = new Edge<string>("a", "b");
-
-            _graph.AddDirectedEdge(a_b);
-            // Should throw
-            _graph.AddDirectedEdge(a_b);
-        }
-
-        [Test]
-        [ExpectedException(typeof(DuplicateEdgeException))]
-        public void TestDuplicateBidirectionalEdgeThrowsException()
-        {
-            _graph.AddVertex("a");
-            _graph.AddVertex("b");
-            var a_b = new Edge<string>("a", "b");
-            var b_a = a_b.Reversed();
-
-            _graph.AddBidirectionalEdge(a_b);
-            // Should throw
-            _graph.AddBidirectionalEdge(b_a);
-        }
-
-        [Test]
-        public void TestEdgeReversed()
-        {
-            var edge = new E("a", "b");
-            var expectedReverse = new E("b", "a");
-
-            Assert.AreEqual(expectedReverse, edge.Reversed());
-        }
-
-        [Test]
-        public void TestVertexIteratorReturnsAllVertices()
-        {
-            var vertices = new List<string> {"a", "b", "c", "d"};
-            foreach(string vertex in vertices)
-            {
-                _graph.AddVertex(vertex);
-            }
-
-            // Consume iterator to get the Count of the list
-            var collectedVertices = new List<string>(_graph.VertexIterator());
-            foreach(string vertex in collectedVertices)
-            {
-                Assert.Contains(vertex, vertices, string.Format("{0} should contain vertex {1}", collectedVertices, vertex));
-            }
-
-            Assert.AreEqual(vertices.Count, collectedVertices.Count, "Should have the same number of vertices");
-        }
-
-        [Test]
-        public void TestEdgeIteratorReturnsAllEdges()
-        {
-            var vertices = new List<string> {"a", "b", "c", "d"};
-            var edges = new List<E> {
-                new E("a", "d"),
-                new E("b", "c"),
-                new E("c", "a"),
-                new E("a", "c")
-            };
-
+            testGraph = new AdjacencyGraph<string, E>();
             foreach(string vertex in vertices){
-                _graph.AddVertex(vertex);
+                testGraph.AddVertex(vertex);
             }
 
-            foreach(E edge in edges){
-                _graph.AddDirectedEdge(edge);
+            foreach(E edge in edgesCosts.Keys){
+                testGraph.AddDirectedEdge(edge);
             }
 
-            var collectedEdges = new List<E>();
+            shortestPath = new Algorithms.DijkstraShortestPath<string, E>(testGraph, edgesCosts);
 
-            foreach(string vertex in _graph.VertexIterator()){
-                foreach(E edge in _graph.EdgeIterator(vertex)){
-                    collectedEdges.Add(edge);
-                }
-            }
-
-            collectedEdges.Sort();
-            edges.Sort();
-            foreach(int i in Enumerable.Range(0, edges.Count)){
-                Assert.AreEqual(edges[i], collectedEdges[i]);
-            }
-
-            Assert.AreEqual(collectedEdges.Count, edges.Count, "Should have the same number of edges");
+            shortestPath.ComputeAllFromVertex("a");
         }
 
         [Test]
-        public void TestBidirectionalGraphHasAllEdges()
+        public void TestComputedCosts()
         {
-            var vertices = new List<string> {"a", "b", "c", "d"};
-            var edges = new List<E> {
-                new E("a", "d"),
-                new E("b", "c"),
-                new E("c", "a"),
-                new E("d", "c")
-            };
+            Assert.AreEqual(shortestPath.ComputedCosts.Count, expectedSmallestCosts.Count);
 
-            // Create list of edges + all the reversed edges
-            var allEdges = new List<E>();
-            foreach(E edge in edges){
-                allEdges.Add(edge);
-                allEdges.Add(edge.Reversed());
+            foreach(var entry in expectedSmallestCosts){
+                Assert.AreEqual(shortestPath.ComputedCosts[entry.Key], entry.Value);
             }
 
-            // Add vertices
+            foreach(var entry in shortestPath.ComputedCosts){
+                Assert.AreEqual(expectedSmallestCosts[entry.Key], entry.Value);
+            }
+        }
+
+        [Test]
+        public void TestComputedPaths()
+        {
+            Assert.AreEqual(shortestPath.ComputedPaths.Count, expectedPaths.Count);
+
+            foreach(var entry in expectedPaths){
+                Assert.AreEqual(shortestPath.ComputedPaths[entry.Key], entry.Value);
+            }
+
+            foreach(var entry in shortestPath.ComputedPaths){
+                Assert.AreEqual(expectedPaths[entry.Key], entry.Value);
+            }
+        }
+    }
+
+    [TestFixtureAttribute]
+    public class DijkstraShortestPathTest_SimpleBidirectionalGraph_ComputeAllFromA
+    {
+        private AdjacencyGraph<string, Edge<string>> testGraph;
+
+        private List<string> vertices = new List<string> {"a", "b", "c", "d", "e"};
+
+        private readonly Dictionary<E, double> edgesCosts = new Dictionary<E, double> {
+            {new E("a", "d"), 3.0},
+            {new E("a", "b"), 20.0},
+            {new E("a", "e"), 2.0},
+            {new E("d", "c"), 2.0},
+            {new E("c", "b"), 2.0},
+            {new E("e", "d"), 2.0}
+        };
+
+        private readonly Dictionary<string, double> expectedSmallestCosts = new Dictionary<string, double> {
+            {"a", 0},
+            {"b", 7},
+            {"c", 5},
+            {"d", 3},
+            {"e", 2},
+        };
+
+        private readonly Dictionary<string, string> expectedPaths = new Dictionary<string, string> {
+            {"a", "a"},
+            {"b", "c"},
+            {"c", "d"},
+            {"d", "a"},
+            {"e", "a"},
+        };
+
+        private Algorithms.DijkstraShortestPath<string, E> shortestPath;
+
+        [SetUpAttribute]
+        public void Setup()
+        {
+            var bidirectionalEdgeCosts = new Dictionary<E, double>();
+
+            // Create dict of forward and backward edges
+            foreach(var edgePair in edgesCosts){
+                var edge = edgePair.Key;
+                var reversed = edge.Reversed();
+                bidirectionalEdgeCosts.Add(edge, edgePair.Value);
+                bidirectionalEdgeCosts.Add(reversed, edgePair.Value);
+            }
+
+            testGraph = new AdjacencyGraph<string, Edge<string>>();
             foreach(string vertex in vertices){
-                _graph.AddVertex(vertex);
+                testGraph.AddVertex(vertex);
             }
 
-            // Add bidirectional edges
-            foreach(E edge in edges){
-                _graph.AddBidirectionalEdge(edge);
+            foreach(E edge in edgesCosts.Keys){
+                testGraph.AddBidirectionalEdge(edge);
             }
 
-            // Collect all the edges from the graph
-            var collectedEdges = new List<E>();
-            foreach(string vertex in _graph.VertexIterator()){
-                foreach(E edge in _graph.EdgeIterator(vertex)){
-                    collectedEdges.Add(edge);
-                }
+            shortestPath = new Algorithms.DijkstraShortestPath<string, E>(testGraph, bidirectionalEdgeCosts);
+
+            shortestPath.ComputeAllFromVertex("a");
+        }
+
+        [Test]
+        public void TestComputedCosts()
+        {
+            Assert.AreEqual(shortestPath.ComputedCosts.Count, expectedSmallestCosts.Count);
+
+            foreach(var entry in expectedSmallestCosts){
+                Assert.AreEqual(entry.Value, shortestPath.ComputedCosts[entry.Key]);
             }
 
-            // Compare
-            collectedEdges.Sort();
-            allEdges.Sort();
-            foreach(int i in Enumerable.Range(0, allEdges.Count)){
-                Assert.AreEqual(allEdges[i], collectedEdges[i]);
+            foreach(var entry in shortestPath.ComputedCosts){
+                Assert.AreEqual(entry.Value, expectedSmallestCosts[entry.Key]);
+            }
+        }
+
+        [Test]
+        public void TestComputedPaths()
+        {
+            Assert.AreEqual(shortestPath.ComputedPaths.Count, expectedPaths.Count);
+
+            foreach(var entry in expectedPaths){
+                Assert.AreEqual(shortestPath.ComputedPaths[entry.Key], entry.Value);
             }
 
-            Assert.AreEqual(collectedEdges.Count, allEdges.Count, "Should have the same number of edges");
+            foreach(var entry in shortestPath.ComputedPaths){
+                Assert.AreEqual(expectedPaths[entry.Key], entry.Value);
+            }
         }
     }
 }
