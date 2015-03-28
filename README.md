@@ -32,8 +32,8 @@ foreach(var edge in stringGraph.EdgeIterator("a"){
 // a goes to c
 // a goes to d
 ```
-Description/Features
---
+### Description/Features
+
 The libary tends toward being simple and modular. It doesn't do a whole lot for you, but provides a base you can build off of.
 
 #### AdjacencyListGraph
