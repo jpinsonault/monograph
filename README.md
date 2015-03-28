@@ -56,8 +56,9 @@ Vertices are added using `AdjacencyListGraph.AddVertex(TVertex vertex)`
     intGraph.AddVertex(42);
 
 #### Adding edges
-Note: Edges must be between vertices that already exist in the graph or an `VertexNotFoundException` will be thrown
+Note: Edges must be between vertices that already exist in the graph or an `VertexNotFoundException` will be thrown.
 Edges are added using either `AdjacencyListGraph.AddDirectedEdge(TEdge edge)` or `AdjacencyListGraph.AddBidirectionalEdge(TEdge edge)`
+
 `AddBidirectionalEdge` creates 2 edges, 1 in both directions
 
     // Assume both vertices already both exist in the graph
