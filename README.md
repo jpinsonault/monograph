@@ -4,7 +4,7 @@ A simple graph data structure specifically written to be compatible with the Uni
 In trying to find a good graph library for Unity I found many that were compatible with Mono but wouldn't work with Unity. So I decided to create yet another one, but make sure it was compatible in the hopes that the next poor soul that comes along looking for a graph library won't have to go through what I did.
 
 ### Quickstart
-
+```c#
     using MonoGraph;
     using System;
     
@@ -31,7 +31,7 @@ In trying to find a good graph library for Unity I found many that were compatib
     // a goes to b
     // a goes to c
     // a goes to d
-
+```
 Description/Features
 --
 The libary tends toward being simple and modular. It doesn't do a whole lot for you, but provides a base you can build off of.
@@ -43,24 +43,24 @@ Currently the only implementation. It might more accurately be called an Adjacen
 #### Creating a graph
 `AdjacencyListGraph<TVertex, TEdge>()`
 In general TVertex will be a `string` or `int` and TEdge will be the `Edge<TVertex>` class provided by this library
-
+```c#
     var stringGraph = new AdjacencyListGraph<string, Edge<string>>();
     var intGraph = new AdjacencyListGraph<int, Edge<int>>();
-
+```
 Note that the type of vertex and the type of the `Edge` must match
 
 #### Adding vertices
 Vertices are added using `AdjacencyListGraph.AddVertex(TVertex vertex)`
-
+```c#
     stringGraph.AddVertex("a");
     intGraph.AddVertex(42);
-
+```
 #### Adding edges
 Note: Edges must be between vertices that already exist in the graph or an `VertexNotFoundException` will be thrown.
 Edges are added using either `AdjacencyListGraph.AddDirectedEdge(TEdge edge)` or `AdjacencyListGraph.AddBidirectionalEdge(TEdge edge)`
 
 `AddBidirectionalEdge` creates 2 edges, 1 in both directions
-
+```c#
     // Assume both vertices already both exist in the graph
     stringGraph.AddDirectedEdge(new Edge<string>("a", "b"));
     
@@ -68,17 +68,17 @@ Edges are added using either `AdjacencyListGraph.AddDirectedEdge(TEdge edge)` or
     // Equivalent to:
     stringGraph.AddDirectedEdge(new Edge<string>("c", "d"));
     stringGraph.AddDirectedEdge(new Edge<string>("d", "c"));
-
+```
 #### Iterating over vertices
 Using  `AdjacencyListGraph.VertexIterator()`
-
+```c#
     foreach(string vertex in stringGraph.VertexIterator()){
         Console.WriteLine(vertex);
     }
-  
+```
 #### Iterating over edges
 Using `AdjacencyListGraph.EdgeIterator(TVertex vertex)`
-
+```c#
     // Find all neighbors of "a"
     Console.WriteLine("Neighbors of a:");
     foreach(var edge in stringGraph.EdgeIterator("a")){
@@ -89,10 +89,10 @@ Using `AdjacencyListGraph.EdgeIterator(TVertex vertex)`
     // a leads to b
     // a leads to c
     // etc
-
+```
 #### Iterating over all edges
 Using `AdjacencyListGraph.AllEdgeIterator()`
-
+```c#
     // Assume graph has edges a->b, a->c, b->c, c->a
     Console.WriteLine("All edges:");
     foreach(var edge in stringGraph.AllEdgeIterator()){
@@ -104,7 +104,7 @@ Using `AdjacencyListGraph.AllEdgeIterator()`
     // c->a
     // a->b
     // a->c
-
+```
 #### Vertices
 Vertices can be any hashable type (`int`, `string`, user defined classes, etc). 
 
@@ -116,25 +116,25 @@ An `Edge` type is included that should cover your basic needs
 #### IEdgeInterface
 A type that implements the `IEdgeInterface` must have properties `Start` and `End`
 It must also implement a method `Reversed` that returns a new copy of itself with `Start` and `End` reversed so that 
-
+```c#
     new CustomEdge<int>(1, 2).Reversed() == new CustomEdge<int>(2, 1) // => true
-
+```
 
 ### Algorithms
 Right now, only an implementation of Dijkstra's shortest path algorithm comes with the libary. More algorithms will be added as I make them or get PRs.
 
-Algorithms are implmented as classes in the `MonoGraph.Algorithms` namespace
+Algorithms are implemented as classes in the `MonoGraph.Algorithms` namespace
 
 #### Dijkstra's shortest path
 This computes the shortest path from a starting vertex to all other vertices in the graph.
 It takes in a graph object and a dictionary mapping edges to their costs.
 After creating the `DijkstraShortestPath` object, run `DijkstraShortestPath.ComputeAllFromVertex(TVertex startVertex)`. Results will be stored in the fields:
-
+```c#
     Dictionary<TVertex, double> ComputedCosts;
     Dictionary<TVertex, TVertex> ComputedPaths;
-
+```
 and will only contain valid data after the computation has finished
-
+```c#
     // Create the graph
     var testGraph = new AdjacencyListGraph<string, Edge<string>>;
     
@@ -176,4 +176,4 @@ and will only contain valid data after the computation has finished
     shortestPath.ComputedPaths["c"]; // -> d
     shortestPath.ComputedPaths["d"]; // -> a
     // a->d->c->b
-    
+```
