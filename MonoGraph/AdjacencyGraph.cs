@@ -27,13 +27,13 @@ namespace MonoGraph
                 throw new DuplicateEdgeException(string.Format("Tried to add edge '{0}' to the graph twice", edge));
             }
 
-            if (!VertexEdgeDictionary.ContainsKey(edge.First)){
-                var errorMessage = string.Format("Tried to add edge to non-existant vertex '{0}'", edge.First);
+            if (!VertexEdgeDictionary.ContainsKey(edge.Start)){
+                var errorMessage = string.Format("Tried to add edge to non-existant vertex '{0}'", edge.Start);
                 throw new VertexNotFoundException(errorMessage);
             }
 
-            if (!VertexEdgeDictionary.ContainsKey(edge.Second)){
-                var errorMessage = string.Format("Tried to add edge to non-existant vertex '{0}'", edge.Second);
+            if (!VertexEdgeDictionary.ContainsKey(edge.End)){
+                var errorMessage = string.Format("Tried to add edge to non-existant vertex '{0}'", edge.End);
                 throw new VertexNotFoundException(errorMessage);
             }
         }
@@ -42,7 +42,7 @@ namespace MonoGraph
         {
             CheckEdge(edge);
 
-            VertexEdgeDictionary[edge.First].Add(edge);
+            VertexEdgeDictionary[edge.Start].Add(edge);
         }
 
         public void AddBidirectionalEdge(TEdge edge)
@@ -52,8 +52,8 @@ namespace MonoGraph
             CheckEdge(edge);
             CheckEdge(rerverseEdge);
 
-            VertexEdgeDictionary[edge.First].Add(edge);
-            VertexEdgeDictionary[edge.Second].Add(rerverseEdge);
+            VertexEdgeDictionary[edge.Start].Add(edge);
+            VertexEdgeDictionary[edge.End].Add(rerverseEdge);
         }
 
         public bool ContainsVertex(TVertex vertex)
@@ -63,7 +63,7 @@ namespace MonoGraph
 
         public bool ContainsEdge(TEdge edge)
         {
-            return VertexEdgeDictionary[edge.First].Contains(edge);
+            return VertexEdgeDictionary[edge.Start].Contains(edge);
         }
 
         public IEnumerable<TVertex> VertexIterator()

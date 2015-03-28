@@ -5,8 +5,8 @@ namespace MonoGraph
     // Every edge object should implment these methods
     public interface IEdgeInterface<TVertex, TEdge>
     {
-        TVertex First { get; }
-        TVertex Second { get; }
+        TVertex Start { get; }
+        TVertex End { get; }
 
         TEdge Reversed();
     }
@@ -18,25 +18,25 @@ namespace MonoGraph
         IComparable<Edge<TVertex>>
         where TVertex : IComparable<TVertex>
     {
-        public TVertex First { get; private set; }
-        public TVertex Second { get; private set; }
+        public TVertex Start { get; private set; }
+        public TVertex End { get; private set; }
 
         public Edge() {}
 
         internal Edge(TVertex first, TVertex second)
         {
-            First = first;
-            Second = second;
+            Start = first;
+            End = second;
         }
 
         public Edge<TVertex> Reversed()
         {
-            return new Edge<TVertex>(Second, First);
+            return new Edge<TVertex>(End, Start);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() ^ Second.GetHashCode();
+            return Start.GetHashCode() ^ End.GetHashCode();
         }
 
         public override bool Equals (Object obj)
@@ -50,7 +50,7 @@ namespace MonoGraph
                 return false;
             }
 
-            return (First.Equals(objCast.First)) && (Second.Equals(objCast.Second));
+            return (Start.Equals(objCast.Start)) && (End.Equals(objCast.End));
         }
 
         public bool Equals(Edge<TVertex> obj)
@@ -60,28 +60,28 @@ namespace MonoGraph
                 return false;
             }
 
-            return (First.Equals(obj.First)) && (Second.Equals(obj.Second));
+            return (Start.Equals(obj.Start)) && (End.Equals(obj.End));
         }
 
         public int CompareTo(Edge<TVertex> obj){
-            // Edges are sorted by comparing the First properties first, then Second
+            // Edges are sorted by comparing the Start properties first, then End
 
             if (obj == null) return 1;
 
-            int comparison = First.CompareTo(obj.First);
+            int comparison = Start.CompareTo(obj.Start);
 
-            // If First != obj.First, use that comparison
+            // If Start != obj.Start, use that comparison
             if (comparison != 0){
                 return comparison;
             }
 
-            // Else use comparison of Second vs Second
-            return Second.CompareTo(obj.Second);
+            // Else use comparison of End vs End
+            return End.CompareTo(obj.End);
         }
 
         public override string ToString()
         {
-            return string.Format("{0}->{1}", First, Second);
+            return string.Format("{0}->{1}", Start, End);
         }
     }
 }

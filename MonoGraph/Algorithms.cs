@@ -43,7 +43,7 @@ namespace MonoGraph.Algorithms
 				var cummulativeCost = ComputedCosts[currentVertex];
 
 				foreach(TEdge edgeToNeighbor in Graph.EdgeIterator(currentVertex)){
-					var neighbor = edgeToNeighbor.Second;
+					var neighbor = edgeToNeighbor.End;
 					var neighborEdgeCost = EdgeCosts[edgeToNeighbor];
 					var neighborComputedCost = ComputedCosts[neighbor];
 
