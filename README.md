@@ -3,6 +3,22 @@ A simple graph data structure specifically written to be compatible with the Uni
 
 In trying to find a good graph library for Unity I found many that were compatible with Mono but wouldn't work with Unity. So I decided to create yet another one, but make sure it was compatible in the hopes that the next poor soul that comes along looking for a graph library won't have to go through what I did.
 
+- [Quickstart](#)
+- [Description/Features](#)
+	- [AdjacencyListGraph](#)
+- [Usage](#)
+	- [Creating a graph](#)
+	- [Adding vertices](#)
+	- [Adding edges](#)
+	- [Iterating over vertices](#)
+	- [Iterating over edges](#)
+	- [Iterating over all edges](#)
+	- [Vertices](#)
+	- [Edges](#)
+	- [IEdgeInterface](#)
+- [Algorithms](#)
+	- [Dijkstra's shortest path](#)
+
 ### Quickstart
 ```c#
 using MonoGraph;
