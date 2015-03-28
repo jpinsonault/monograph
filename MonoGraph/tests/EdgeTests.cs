@@ -229,4 +229,82 @@ namespace MonoGraph
             Assert.AreEqual(collectedEdges.Count, allEdges.Count, "Should have the same number of edges");
         }
     }
+
+    [TestFixtureAttribute]
+    class TestRemoveEdgesAndVertices
+    {
+        private AdjacencyListGraph<string, Edge<string>> testGraph;
+        
+        private List<string> vertices = new List<string>{"a", "b", "c", "d", "e"};
+
+        private List<E> edges = new List<E> {
+            new E("a", "d"),
+            new E("a", "b"),
+            new E("a", "e"),
+            new E("d", "c"),
+            new E("c", "d"),
+            new E("c", "a"),
+            new E("e", "d")
+        };
+
+        [SetUpAttribute]
+        public void Setup()
+        {
+            testGraph = new AdjacencyListGraph<string, Edge<string>>();
+            
+            foreach(var vertex in vertices) { testGraph.AddVertex(vertex); }
+
+            foreach(var edge in edges) { testGraph.AddDirectedEdge(edge); }
+        }
+
+        [Test]
+        public void TestRemoveVertexRemovesVertex()
+        {
+            testGraph.RemoveVertex("a");
+            Assert.IsFalse(testGraph.ContainsVertex("a"));
+        }
+
+        [Test]
+        public void TestRemoveVertexRemovesAssociatedEdges()
+        {
+            testGraph.RemoveVertex("a");
+            Assert.IsFalse(testGraph.ContainsEdge(new E("a", "d")));
+
+            // Make sure edges going to "a" are also gone
+            Assert.IsFalse(testGraph.ContainsEdge(new E("c", "a")));
+        }
+
+        [Test]
+        public void TestRemoveEdgeRemovesEdge()
+        {
+            testGraph.RemoveEdge(new E("a", "d"));
+            Assert.IsFalse(testGraph.ContainsEdge(new E("a", "d")));
+        }
+        
+        [Test]
+        public void TestRemoveBidirectionalEdge()
+        {
+            var c_d = new E("c", "d");
+            var d_c = new E("d", "c");
+            
+            testGraph.RemoveBidirectionalEdge(c_d);
+
+            Assert.IsFalse(testGraph.ContainsEdge(c_d));
+            Assert.IsFalse(testGraph.ContainsEdge(d_c));
+        }
+
+        [Test]
+        [ExpectedException(typeof(VertexNotFoundException))]
+        public void TestRemovingEdgeFromNonExistantVertexThrows()
+        {
+            testGraph.RemoveEdge(new E("not_there", "d"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(EdgeNotFoundException))]
+        public void TestRemovingEdgeFromExistingVertexThrows()
+        {
+            testGraph.RemoveEdge(new E("a", "not_there"));
+        }
+    }
 }

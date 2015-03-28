@@ -16,6 +16,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MonoGraph\MonoGraph.csproj
-		version = 0.2
+		version = 0.3
 	EndGlobalSection
 EndGlobal

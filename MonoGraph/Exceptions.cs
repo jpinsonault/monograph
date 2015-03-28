@@ -52,4 +52,21 @@ namespace MonoGraph
         {
         }
     }
+
+    public class EdgeNotFoundException : Exception
+    {
+        public EdgeNotFoundException()
+        {
+        }
+
+        public EdgeNotFoundException(string message)
+            : base(message)
+        {
+        }
+
+        public EdgeNotFoundException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
 }
