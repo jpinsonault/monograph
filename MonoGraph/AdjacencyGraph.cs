@@ -81,5 +81,16 @@ namespace MonoGraph
                 yield return edge;
             }
         }
+
+        public IEnumerable<TEdge> AllEdgeIterator()
+        {
+            foreach(TVertex vertex in VertexEdgeDictionary.Keys)
+            {
+                foreach(TEdge edge in VertexEdgeDictionary[vertex])
+                {
+                    yield return edge;
+                }
+            }
+        }
     }
 }

@@ -7,12 +7,11 @@ namespace MonoGraph.Algorithms
 {
 	class DijkstraShortestPath<TVertex, TEdge> 
 		where TEdge : IEdgeInterface<TVertex, TEdge>
-		where TVertex: struct
 	{
 		private readonly AdjacencyGraph<TVertex, TEdge> Graph;
 		private readonly Dictionary<TEdge, double> EdgeCosts;
 		public readonly Dictionary<TVertex, double> ComputedCosts;
-		public readonly Dictionary<TVertex, TVertex?> Routes;
+		public readonly Dictionary<TVertex, TVertex> ComputedPaths;
 
 		public DijkstraShortestPath(AdjacencyGraph<TVertex, TEdge> graph, Dictionary<TEdge, double> edgeCosts)
 		{
@@ -20,12 +19,9 @@ namespace MonoGraph.Algorithms
 			this.EdgeCosts = edgeCosts;
 
 			ComputedCosts = new Dictionary<TVertex, double>();
-			Routes = new Dictionary<TVertex, TVertex?>();
 
-			// Start every route as null
-			foreach(TVertex vertex in Graph.VertexIterator()){
-				Routes.Add(vertex, null);
-			}
+			// The absence of a route entry in ComputedPaths means it's unreachable
+			ComputedPaths = new Dictionary<TVertex, TVertex>();
 
 			// Start every distance to infinity
 			foreach(TVertex vertex in Graph.VertexIterator()){
@@ -34,9 +30,10 @@ namespace MonoGraph.Algorithms
 		}
 
 		// Compute distance from startVertex to all other vertices
-		public void Compute(TVertex startVertex)
+		public void ComputeAllFromVertex(TVertex startVertex)
 		{
 			ComputedCosts[startVertex] = 0.0;
+			ComputedPaths[startVertex] = startVertex;
 
 			var remainingVertices = new HashSet<TVertex>(Graph.VertexIterator());
 
@@ -50,9 +47,14 @@ namespace MonoGraph.Algorithms
 					var neighborEdgeCost = EdgeCosts[edgeToNeighbor];
 					var neighborComputedCost = ComputedCosts[neighbor];
 
+					var costFromCurrent = cummulativeCost + neighborEdgeCost;
+
 					// Cost to neighbor is either what it already was, or the cost
 					// to get here plus the cost of the edge
-					ComputedCosts[neighbor] = Math.Min(neighborComputedCost, cummulativeCost + neighborEdgeCost);
+					if (costFromCurrent < neighborComputedCost){
+						ComputedCosts[neighbor] = costFromCurrent;
+						ComputedPaths[neighbor] = currentVertex;
+					}
 				}
 			}
 		}
