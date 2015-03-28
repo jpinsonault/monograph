@@ -72,9 +72,9 @@ Edges are added using either `AdjacencyListGraph.AddDirectedEdge(TEdge edge)` or
 #### Iterating over vertices
 Using  `AdjacencyListGraph.VertexIterator()`
 
-  foreach(string vertex in stringGraph.VertexIterator()){
-      Console.WriteLine(vertex);
-  }
+    foreach(string vertex in stringGraph.VertexIterator()){
+        Console.WriteLine(vertex);
+    }
   
 #### Iterating over edges
 Using `AdjacencyListGraph.EdgeIterator(TVertex vertex)`
