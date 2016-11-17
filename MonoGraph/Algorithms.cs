@@ -5,7 +5,7 @@ using System;
 
 namespace MonoGraph.Algorithms
 {
-	class DijkstraShortestPath<TVertex, TEdge> 
+	public class DijkstraShortestPath<TVertex, TEdge> 
 		where TEdge : IEdgeInterface<TVertex, TEdge>
 	{
 		private readonly AdjacencyListGraph<TVertex, TEdge> Graph;

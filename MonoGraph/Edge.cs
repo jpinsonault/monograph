@@ -23,7 +23,7 @@ namespace MonoGraph
 
         public Edge() {}
 
-        internal Edge(TVertex first, TVertex second)
+        public Edge(TVertex first, TVertex second)
         {
             Start = first;
             End = second;

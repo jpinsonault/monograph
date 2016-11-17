@@ -3,17 +3,16 @@ namespace MonoGraph
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
-    using System;
 
     // Alias for easy typing
     using E = Edge<string>;
 
-    [TestFixtureAttribute]
+    [TestFixture]
     public class VertexAndEdgeTests
     {
         private AdjacencyListGraph<string, Edge<string>> testGraph;
 
-        [SetUpAttribute]
+        [SetUp]
         public void Setup()
         {
             testGraph = new AdjacencyListGraph<string, Edge<string>>();
@@ -230,7 +229,7 @@ namespace MonoGraph
         }
     }
 
-    [TestFixtureAttribute]
+    [TestFixture]
     class TestRemoveEdgesAndVertices
     {
         private AdjacencyListGraph<string, Edge<string>> testGraph;
@@ -247,7 +246,7 @@ namespace MonoGraph
             new E("e", "d")
         };
 
-        [SetUpAttribute]
+        [SetUp]
         public void Setup()
         {
             testGraph = new AdjacencyListGraph<string, Edge<string>>();
