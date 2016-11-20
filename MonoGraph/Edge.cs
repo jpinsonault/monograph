@@ -3,20 +3,17 @@ using System;
 namespace MonoGraph
 {
     // Every edge object should implment these methods
-    public interface IEdgeInterface<TVertex, TEdge>
-    {
+	public interface IEdge<TVertex> :
+	IComparable<IEdge<TVertex>>, IEquatable<IEdge<TVertex>> where TVertex : IComparable<TVertex>
+	{
         TVertex Start { get; }
         TVertex End { get; }
 
-        TEdge Reversed();
+        IEdge<TVertex> Reversed();
     }
 
     // Basic edge class that just holds two vertices in a tuple
-    public class Edge<TVertex> :
-        IEdgeInterface<TVertex, Edge<TVertex>>,
-        IEquatable<Edge<TVertex>>,
-        IComparable<Edge<TVertex>>
-        where TVertex : IComparable<TVertex>
+	public class Edge<TVertex> : IEdge<TVertex> where TVertex : IComparable<TVertex>
     {
         public TVertex Start { get; private set; }
         public TVertex End { get; private set; }
@@ -29,7 +26,7 @@ namespace MonoGraph
             End = second;
         }
 
-        public Edge<TVertex> Reversed()
+        public IEdge<TVertex> Reversed()
         {
             return new Edge<TVertex>(End, Start);
         }
@@ -53,7 +50,7 @@ namespace MonoGraph
             return (Start.Equals(objCast.Start)) && (End.Equals(objCast.End));
         }
 
-        public bool Equals(Edge<TVertex> obj)
+        public bool Equals(IEdge<TVertex> obj)
         {
             if ((object)obj == null)
             {
@@ -63,12 +60,14 @@ namespace MonoGraph
             return (Start.Equals(obj.Start)) && (End.Equals(obj.End));
         }
 
-        public int CompareTo(Edge<TVertex> obj){
+        public int CompareTo(object obj){
             // Edges are sorted by comparing the Start properties first, then End
 
-            if (obj == null) return 1;
+            if ((Edge<TVertex>)obj == null) return 1;
 
-            int comparison = Start.CompareTo(obj.Start);
+			var edgeObject = (Edge<TVertex>)obj;
+
+			int comparison = Start.CompareTo(edgeObject.Start);
 
             // If Start != obj.Start, use that comparison
             if (comparison != 0){
@@ -76,12 +75,26 @@ namespace MonoGraph
             }
 
             // Else use comparison of End vs End
-            return End.CompareTo(obj.End);
+            return End.CompareTo(edgeObject.End);
         }
+
+		public int CompareTo(IEdge<TVertex> other)
+		{
+			int comparison = Start.CompareTo(other.Start);
+
+			// If Start != obj.Start, use that comparison
+			if (comparison != 0)
+			{
+				return comparison;
+			}
+
+			// Else use comparison of End vs End
+			return End.CompareTo(other.End);
+		}
 
         public override string ToString()
         {
             return string.Format("{0}->{1}", Start, End);
         }
-    }
+	}
 }

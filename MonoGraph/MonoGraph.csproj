@@ -48,6 +48,10 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Algorithms.cs" />
+    <Compile Include="DisjointSetCollection.cs" />
+    <Compile Include="Neighbor.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="UndirectedEdge.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

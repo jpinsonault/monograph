@@ -2,21 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-
 namespace MonoGraph.Algorithms
 {
-	public class DijkstraShortestPath<TVertex, TEdge> 
-		where TEdge : IEdgeInterface<TVertex, TEdge>
+	public class DijkstraShortestPath<TVertex> where TVertex : IComparable<TVertex>
 	{
-		private readonly AdjacencyListGraph<TVertex, TEdge> Graph;
-		private readonly Dictionary<TEdge, double> EdgeCosts;
+		private readonly IGraph<TVertex> Graph;
+		private readonly Dictionary<IEdge<TVertex>, double> EdgeCosts;
 		public readonly Dictionary<TVertex, double> ComputedCosts;
 		public readonly Dictionary<TVertex, TVertex> ComputedPaths;
 
-		public DijkstraShortestPath(AdjacencyListGraph<TVertex, TEdge> graph, Dictionary<TEdge, double> edgeCosts)
+		public DijkstraShortestPath(IGraph<TVertex> graph, Dictionary<IEdge<TVertex>, double> edgeCosts)
 		{
-			this.Graph = graph;
-			this.EdgeCosts = edgeCosts;
+			Graph = graph;
+			EdgeCosts = edgeCosts;
 
 			ComputedCosts = new Dictionary<TVertex, double>();
 
@@ -24,7 +22,8 @@ namespace MonoGraph.Algorithms
 			ComputedPaths = new Dictionary<TVertex, TVertex>();
 
 			// Start every distance to infinity
-			foreach(TVertex vertex in Graph.VertexIterator()){
+			foreach (TVertex vertex in Graph.VertexIterator())
+			{
 				ComputedCosts.Add(vertex, float.PositiveInfinity);
 			}
 		}
@@ -37,12 +36,14 @@ namespace MonoGraph.Algorithms
 
 			var remainingVertices = new HashSet<TVertex>(Graph.VertexIterator());
 
-			while (remainingVertices.Count > 0) {
+			while (remainingVertices.Count > 0)
+			{
 				var currentVertex = popShortestRemaining(remainingVertices);
 				// Cost to get to current vertex
 				var cummulativeCost = ComputedCosts[currentVertex];
 
-				foreach(TEdge edgeToNeighbor in Graph.EdgeIterator(currentVertex)){
+				foreach (IEdge<TVertex> edgeToNeighbor in Graph.EdgeIterator(currentVertex))
+				{
 					var neighbor = edgeToNeighbor.End;
 					var neighborEdgeCost = EdgeCosts[edgeToNeighbor];
 					var neighborComputedCost = ComputedCosts[neighbor];
@@ -51,7 +52,8 @@ namespace MonoGraph.Algorithms
 
 					// Cost to neighbor is either what it already was, or the cost
 					// to get here plus the cost of the edge
-					if (costFromCurrent < neighborComputedCost){
+					if (costFromCurrent < neighborComputedCost)
+					{
 						ComputedCosts[neighbor] = costFromCurrent;
 						ComputedPaths[neighbor] = currentVertex;
 					}
@@ -66,6 +68,43 @@ namespace MonoGraph.Algorithms
 			vertices.Remove(shortest);
 
 			return shortest;
+		}
+	}
+
+	public static class KruskalMST<TVertex> where TVertex : IComparable<TVertex>
+	{
+		public static UndirectedAdjacencyListGraph<TVertex> Get(
+			UndirectedAdjacencyListGraph<TVertex> graph, Dictionary<IEdge<TVertex>, double> edgeCosts)
+		{
+			var spanningTree = new UndirectedAdjacencyListGraph<TVertex>();
+			var disjointSet = new DisjointSetCollection<TVertex>(graph.VertexIterator());
+
+			var edgeList = new List<IEdge<TVertex>>();
+
+			foreach (var edge in graph.AllEdgeIterator())
+			{
+				edgeList.Add(edge);
+			}
+
+			// Sort by edge weight
+			edgeList.Sort((x, y) => edgeCosts[x].CompareTo(edgeCosts[y]));
+
+			// Add the vertices from the original graph to the MST
+			foreach (var vertex in graph.VertexIterator())
+			{
+				spanningTree.AddVertex(vertex);
+			}
+
+			foreach (var edge in edgeList)
+			{
+				if (!disjointSet.SameSet(edge.Start, edge.End))
+				{
+					spanningTree.AddEdge(edge);
+					disjointSet.Union(edge.Start, edge.End);
+				}
+			}
+
+			return spanningTree;
 		}
 	}
 }

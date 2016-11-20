@@ -10,12 +10,12 @@ namespace MonoGraph
     [TestFixture]
     public class VertexAndEdgeTests
     {
-        private AdjacencyListGraph<string, Edge<string>> testGraph;
+        private DirectedAdjacencyListGraph<string> testGraph;
 
         [SetUp]
         public void Setup()
         {
-            testGraph = new AdjacencyListGraph<string, Edge<string>>();
+            testGraph = new DirectedAdjacencyListGraph<string>();
         }
 
         [Test]
@@ -24,14 +24,6 @@ namespace MonoGraph
             var reason = "graph should contain vertex 'a'";
             testGraph.AddVertex("a");
             Assert.IsTrue(testGraph.ContainsVertex("a"), reason);
-        }
-
-        [Test]
-        [ExpectedException(typeof(DuplicateVertexException))]
-        public void TestDuplicateVertexThrowsException()
-        {
-            testGraph.AddVertex("a");
-            testGraph.AddVertex("a");
         }
 
         [Test]
@@ -54,7 +46,7 @@ namespace MonoGraph
 
             testGraph.AddVertex("a");
             testGraph.AddVertex("b");
-            testGraph.AddDirectedEdge(a_b);
+            testGraph.AddEdge(a_b);
 
             Assert.IsTrue(testGraph.ContainsEdge(a_b), reason);
         }
@@ -68,20 +60,7 @@ namespace MonoGraph
             testGraph.AddVertex("a");
             testGraph.AddVertex("b");
             // Should throw
-            testGraph.AddDirectedEdge(a_b);
-        }
-
-        [Test]
-        [ExpectedException(typeof(DuplicateEdgeException))]
-        public void TestDuplicateEdgeThrowsException()
-        {
-            testGraph.AddVertex("a");
-            testGraph.AddVertex("b");
-            var a_b = new E("a", "b");
-
-            testGraph.AddDirectedEdge(a_b);
-            // Should throw
-            testGraph.AddDirectedEdge(a_b);
+            testGraph.AddEdge(a_b);
         }
 
         [Test]
@@ -95,27 +74,13 @@ namespace MonoGraph
             testGraph.AddBidirectionalEdge(a_b);
 
             // Collect all the edges
-            var collectedEdges = new List<E>(testGraph.AllEdgeIterator());
+            var collectedEdges = new List<IEdge<string>>(testGraph.AllEdgeIterator());
 
             Assert.AreEqual(collectedEdges.Count, 2);
 
             // Make sure both b_a and a_b are in the graph
             Assert.IsTrue(collectedEdges.Contains(a_b));
             Assert.IsTrue(collectedEdges.Contains(b_a));
-        }
-
-        [Test]
-        [ExpectedException(typeof(DuplicateEdgeException))]
-        public void TestDuplicateBidirectionalEdgeThrowsException()
-        {
-            testGraph.AddVertex("a");
-            testGraph.AddVertex("b");
-            var a_b = new E("a", "b");
-            var b_a = a_b.Reversed();
-
-            testGraph.AddBidirectionalEdge(a_b);
-            // Should throw
-            testGraph.AddBidirectionalEdge(b_a);
         }
 
         [Test]
@@ -162,7 +127,7 @@ namespace MonoGraph
             }
 
             foreach(E edge in edges){
-                testGraph.AddDirectedEdge(edge);
+                testGraph.AddEdge(edge);
             }
 
             var collectedEdges = new List<E>();
@@ -194,7 +159,7 @@ namespace MonoGraph
             };
 
             // Create list of edges + all the reversed edges
-            var allEdges = new List<E>();
+            var allEdges = new List<IEdge<string>>();
             foreach(E edge in edges){
                 allEdges.Add(edge);
                 allEdges.Add(edge.Reversed());
@@ -232,7 +197,7 @@ namespace MonoGraph
     [TestFixture]
     class TestRemoveEdgesAndVertices
     {
-        private AdjacencyListGraph<string, Edge<string>> testGraph;
+        private DirectedAdjacencyListGraph<string> testGraph;
         
         private List<string> vertices = new List<string>{"a", "b", "c", "d", "e"};
 
@@ -249,11 +214,11 @@ namespace MonoGraph
         [SetUp]
         public void Setup()
         {
-            testGraph = new AdjacencyListGraph<string, Edge<string>>();
+            testGraph = new DirectedAdjacencyListGraph<string>();
             
             foreach(var vertex in vertices) { testGraph.AddVertex(vertex); }
 
-            foreach(var edge in edges) { testGraph.AddDirectedEdge(edge); }
+            foreach(var edge in edges) { testGraph.AddEdge(edge); }
         }
 
         [Test]

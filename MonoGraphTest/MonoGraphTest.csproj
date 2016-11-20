@@ -35,6 +35,10 @@
   <ItemGroup>
     <Compile Include="AdjacencyGraphTests.cs" />
     <Compile Include="EdgeTests.cs" />
+    <Compile Include="DisjointSetCollectionTests.cs" />
+    <Compile Include="KruskalMSTTests.cs" />
+    <Compile Include="UndirectedGraphTests.cs" />
+    <Compile Include="UndirectedEdgeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

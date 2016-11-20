@@ -9,11 +9,11 @@
 	[TestFixture]
 	public class DijkstraShortestPathTest_SimpleDirectedGraph_ComputeAllFromA
 	{
-		private AdjacencyListGraph<string, Edge<string>> testGraph;
+		private DirectedAdjacencyListGraph<string> testGraph;
 
 		private List<string> vertices = new List<string> { "a", "b", "c", "d", "e" };
 
-		private readonly Dictionary<E, double> edgesCosts = new Dictionary<E, double> {
+		private readonly Dictionary<IEdge<string>, double> edgesCosts = new Dictionary<IEdge<string>, double> {
 			{new E("a", "d"), 3.0},
 			{new E("a", "b"), 20.0},
 			{new E("a", "e"), 2.0},
@@ -38,23 +38,23 @@
 			{"e", "a"},
 		};
 
-		private Algorithms.DijkstraShortestPath<string, E> shortestPath;
+		private Algorithms.DijkstraShortestPath<string> shortestPath;
 
 		[SetUp]
 		public void Setup()
 		{
-			testGraph = new AdjacencyListGraph<string, E>();
+			testGraph = new DirectedAdjacencyListGraph<string>();
 			foreach (string vertex in vertices)
 			{
 				testGraph.AddVertex(vertex);
 			}
 
-			foreach (E edge in edgesCosts.Keys)
+			foreach (IEdge<string> edge in edgesCosts.Keys)
 			{
-				testGraph.AddDirectedEdge(edge);
+				testGraph.AddEdge(edge);
 			}
 
-			shortestPath = new Algorithms.DijkstraShortestPath<string, E>(testGraph, edgesCosts);
+			shortestPath = new Algorithms.DijkstraShortestPath<string>(testGraph, edgesCosts);
 
 			shortestPath.ComputeAllFromVertex("a");
 		}
@@ -95,7 +95,7 @@
 	[TestFixture]
 	public class DijkstraShortestPathTest_SimpleBidirectionalGraph_ComputeAllFromA
 	{
-		private AdjacencyListGraph<string, Edge<string>> testGraph;
+		private DirectedAdjacencyListGraph<string> testGraph;
 
 		private List<string> vertices = new List<string> { "a", "b", "c", "d", "e" };
 
@@ -124,12 +124,12 @@
 			{"e", "a"},
 		};
 
-		private Algorithms.DijkstraShortestPath<string, E> shortestPath;
+		private Algorithms.DijkstraShortestPath<string> shortestPath;
 
 		[SetUp]
 		public void Setup()
 		{
-			var bidirectionalEdgeCosts = new Dictionary<E, double>();
+			var bidirectionalEdgeCosts = new Dictionary<IEdge<string>, double>();
 
 			// Create dict of forward and backward edges
 			foreach (var edgePair in edgesCosts)
@@ -140,7 +140,7 @@
 				bidirectionalEdgeCosts.Add(reversed, edgePair.Value);
 			}
 
-			testGraph = new AdjacencyListGraph<string, Edge<string>>();
+			testGraph = new DirectedAdjacencyListGraph<string>();
 			foreach (string vertex in vertices)
 			{
 				testGraph.AddVertex(vertex);
@@ -151,7 +151,7 @@
 				testGraph.AddBidirectionalEdge(edge);
 			}
 
-			shortestPath = new Algorithms.DijkstraShortestPath<string, E>(testGraph, bidirectionalEdgeCosts);
+			shortestPath = new Algorithms.DijkstraShortestPath<string>(testGraph, bidirectionalEdgeCosts);
 
 			shortestPath.ComputeAllFromVertex("a");
 		}
