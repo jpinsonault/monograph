@@ -21,9 +21,7 @@ namespace MonoGraph
         public TVertex Start { get; private set; }
         public TVertex End { get; private set; }
 
-        public Edge() {}
-
-        internal Edge(TVertex first, TVertex second)
+        public Edge(TVertex first, TVertex second)
         {
             Start = first;
             End = second;
